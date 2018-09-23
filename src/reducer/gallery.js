@@ -10,7 +10,7 @@ export const actions = {
 export const setBusy = createAction(actions.setBusy);
 export const unsetBusy = createAction(actions.unsetBusy);
 export const loadImages = createAction(actions.loadImages);
-export const setImages = createaction(actions.setImages);
+export const setImages = createAction(actions.setImages);
 
 const defaultState = {
 	images: [],
