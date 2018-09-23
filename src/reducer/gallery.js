@@ -21,4 +21,4 @@ export default handleActions({
 	[actions.setBusy]: (state, action) => ({ ...state, isBusy: true }),
 	[actions.unsetBusy]: (state, action) => ({ ...state, isBusy: false }),
 	[actions.setImages]: (state, action) => ({ ...state, images: action.payload })
-});
+}, defaultState);
