@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 
 import gallery from './gallery';
 
-const combinedReducer = combinedReducers({
+const combinedReducer = combineReducers({
     gallery
 });
 
