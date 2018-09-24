@@ -124,7 +124,6 @@ class ImageGallery extends Component {
 	render() {
 		const { isBusy, images, sorting, search, pagination, selectedImage, showImages, classes } = this.props;
 
-		console.log(showImages)
 		return (
 			<PageWrapper>
 				<Toolbar>
