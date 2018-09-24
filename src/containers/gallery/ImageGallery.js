@@ -149,7 +149,7 @@ class ImageGallery extends Component {
 					<FormControl className={classes.formControl}>
 						<InputLabel htmlFor="sort-by">Images per page</InputLabel>
 						<Select
-							value={this.state.sortby}
+							value={this.state.imagesPerPage}
 							onChange={this.handleChange('imagesPerPage')}
 							inputProps={{
 								name: 'imagesperpage',
