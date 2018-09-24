@@ -3,11 +3,16 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
-import { Paper, CircularProgress } from '@material-ui/core';
+import { Paper, CircularProgress, TextField } from '@material-ui/core';
 
 import { loadImages, setBusy } from '../../reducer/gallery';
 import PageWrapper from '../../components/PageWrapper';
 
+const Toolbar = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+`;
 const PaperHeader = styled.div`
   padding: 10px 20px 10px 20px;
   display: flex;
@@ -34,11 +39,6 @@ const Label = styled.label`
   padding-right: 12px;
   text-align: center;
 `;
-const ContentContainer = styled.div`
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-`;
 class ImageGallery extends Component {
 
 	constructor(props) {
@@ -46,22 +46,42 @@ class ImageGallery extends Component {
 
 		this.state = {
 			query: '',
-		}
+		};
+
+		this.updateResults = this.updateResults.bind(this);
 	}
 
 	componentDidMount() {
+		this.updateResults();
+	}
+
+	updateResults() {
 		this.props.loadImages({
-			feedUrl: this.props.feed
+			feedUrl: this.props.feed,
+			query: this.state.query,
 		});
 	}
 	
+	handleChange = name => e => {
+		this.setState({
+			[name]: e.target.value,
+		}, () => this.updateResults());
+	}
+
 	render() {
 		const { isBusy, images } = this.props;
 
 		return (
 			<PageWrapper>
+				<Toolbar>
+          <TextField
+						label="Search by title"
+						type="search"
+						onChange={this.handleChange('query')}
+          />
+        </Toolbar>
 				<Paper
-					zDepth={2}
+					zdepth={2}
 					style={{
 						position: 'relative',
 						marginTop: 20,
