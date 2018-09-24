@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
+import { withStyles } from '@material-ui/core/styles';
 import { 
 	Paper, 
 	CircularProgress, 
@@ -10,11 +11,23 @@ import {
 	Select, 
 	MenuItem,
 	FormControl,
-	InputLabel
+	InputLabel,
+	Dialog,
+	DialogContent,
+	DialogContentText,
+	DialogActions,
+	Button,
 } from '@material-ui/core';
 
-import { loadImages, setBusy } from '../../reducer/gallery';
+import { loadImages, setBusy, selectImage, toggleImageModal } from '../../reducer/gallery';
 import PageWrapper from '../../components/PageWrapper';
+
+const styles = theme => ({
+	dialog: {
+		width: 700,
+		height: 650
+	}
+});
 
 const Toolbar = styled.div`
 	display: flex;
@@ -77,8 +90,26 @@ class ImageGallery extends Component {
 		}, () => this.updateResults());
 	}
 
+	openImage = (id) => {
+		return (e) => {
+			this.props.selectImage(id);
+		}
+	}
+
+	toggleImageModal = (isShow) => {
+		return (e) => {
+			this.props.toggleImageModal(isShow);
+		}
+	}
+
+	selectNextPrevImage = (sign) => {
+		return (e) => {
+			this.props.selectImage(this.props.selectedImage + sign);
+		}
+	}
+
 	render() {
-		const { isBusy, images, sorting, search, pagination } = this.props;
+		const { isBusy, images, sorting, search, pagination, selectedImage, classes } = this.props;
 
 		return (
 			<PageWrapper>
@@ -121,10 +152,32 @@ class ImageGallery extends Component {
 					}
 					{
 						!isBusy && !isEmpty(images) && images.map((image, id) => 
-							<Img key={id} src={image.url} alt={'img_'+id}/>
+							<Img key={id} src={image.url} alt={'img_'+id} onClick={this.openImage(id)}/>
 						)
 					}
 				</Paper>
+				<Dialog
+					open={this.props.bShowImageModal}
+					onClose={this.toggleImageModal(false)}
+				>
+					<DialogContent>
+						<DialogContentText>
+							{images[selectedImage].title}
+						</DialogContentText>
+						<img src={images[selectedImage].url} alt={'img_'+selectedImage} />
+					</DialogContent>
+					<DialogActions>						
+						{selectedImage > 0 && <Button onClick={this.selectNextPrevImage(-1)} color="primary">
+							Prev
+						</Button>}
+						{selectedImage < images.length && <Button onClick={this.selectNextPrevImage(1)} color="primary">
+							Next
+						</Button>}
+						<Button onClick={this.toggleImageModal(false)} color="primary">
+							Close
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</PageWrapper>
 		)
 	}
@@ -142,11 +195,15 @@ ImageGallery.propTypes = {
 const mapStateToProps = state => ({
 	isBusy: state.gallery.isBusy,
 	images: state.gallery.images,
+	selectedImage: state.gallery.selectedImage,
+	bShowImageModal: state.gallery.bShowImageModal,
 });
 
 const mapDispatchToProps = {
 	loadImages,
-	setBusy
+	setBusy,
+	selectImage,
+	toggleImageModal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImageGallery);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ImageGallery));
