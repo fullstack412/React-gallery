@@ -3,14 +3,21 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
-import { Paper, CircularProgress, TextField } from '@material-ui/core';
+import { 
+	Paper, 
+	CircularProgress, 
+	TextField, 
+	Select, 
+	MenuItem,
+	FormControl,
+	InputLabel
+} from '@material-ui/core';
 
 import { loadImages, setBusy } from '../../reducer/gallery';
 import PageWrapper from '../../components/PageWrapper';
 
 const Toolbar = styled.div`
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
 `;
 const PaperHeader = styled.div`
@@ -46,6 +53,7 @@ class ImageGallery extends Component {
 
 		this.state = {
 			query: '',
+			sortby: 'title',
 		};
 
 		this.updateResults = this.updateResults.bind(this);
@@ -59,6 +67,7 @@ class ImageGallery extends Component {
 		this.props.loadImages({
 			feedUrl: this.props.feed,
 			query: this.state.query,
+			sortby: this.state.sortby
 		});
 	}
 	
@@ -69,16 +78,30 @@ class ImageGallery extends Component {
 	}
 
 	render() {
-		const { isBusy, images } = this.props;
+		const { isBusy, images, sorting, search, pagination } = this.props;
 
 		return (
 			<PageWrapper>
 				<Toolbar>
-          <TextField
+          {search && <TextField
 						label="Search by title"
 						type="search"
 						onChange={this.handleChange('query')}
-          />
+          />}
+          {sorting && <FormControl>
+						<InputLabel htmlFor="sort-by">Sort by</InputLabel>
+						<Select
+							value={this.state.sortby}
+							onChange={this.handleChange('sortby')}
+							inputProps={{
+								name: 'sort',
+								id: 'sort-by',
+							}}
+						>
+							<MenuItem value={'title'}>Title</MenuItem>
+							<MenuItem value={'date'}>Date</MenuItem>
+						</Select>
+					</FormControl>}
         </Toolbar>
 				<Paper
 					zdepth={2}
