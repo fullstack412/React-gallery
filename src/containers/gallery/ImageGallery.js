@@ -28,6 +28,10 @@ const styles = theme => ({
 		width: 700,
 		height: 650
 	},
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+  },
 	pagination: {
 		userSelect: 'none',
 		alignItems: 'center',
@@ -155,7 +159,7 @@ class ImageGallery extends Component {
 						type="search"
 						onChange={this.handleChange('query')}
           />}
-          {sorting && <FormControl>
+          {sorting && <FormControl className={classes.formControl}>
 						<InputLabel htmlFor="sort-by">Sort by</InputLabel>
 						<Select
 							value={this.state.sortby}
@@ -169,6 +173,22 @@ class ImageGallery extends Component {
 							<MenuItem value={'date'}>Date</MenuItem>
 						</Select>
 					</FormControl>}
+					<FormControl className={classes.formControl}>
+						<InputLabel htmlFor="sort-by">Images per page</InputLabel>
+						<Select
+							value={this.state.sortby}
+							onChange={this.handleChange('imagesPerPage')}
+							inputProps={{
+								name: 'imagesperpage',
+								id: 'images-per-page',
+							}}
+						>
+							<MenuItem value={5}>5</MenuItem>
+							<MenuItem value={10}>10</MenuItem>
+							<MenuItem value={15}>15</MenuItem>
+							<MenuItem value={20}>20</MenuItem>
+						</Select>
+					</FormControl>
         </Toolbar>
 				<Paper
 					zdepth={2}
