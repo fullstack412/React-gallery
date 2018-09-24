@@ -14,7 +14,7 @@ export const setImages = createAction(actions.setImages);
 
 const defaultState = {
 	images: [],
-	isBusy: false
+	isBusy: true
 };
 
 export default handleActions({
