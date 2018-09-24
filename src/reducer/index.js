@@ -15,4 +15,4 @@ const combinedReducer = combineReducers({
 
 const appReducer = persistReducer(config, combinedReducer);
 
-export default combinedReducer;
+export default appReducer;

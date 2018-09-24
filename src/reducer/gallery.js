@@ -3,7 +3,7 @@ import { createAction, handleActions } from 'redux-actions';
 export const actions = {
 	setBusy: 'gallery/SET_BUSY',
 	unsetBusy: 'gallery/UNSET_BUSY',
-	loadImages: 'galery/LOAD_IMAGES',
+	loadImages: 'gallery/LOAD_IMAGES',
 	setImages: 'gallery/SET_IMAGES'
 };
 

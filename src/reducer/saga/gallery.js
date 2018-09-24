@@ -5,8 +5,8 @@ import { getImages } from '../../services/gallery';
 
 export function* loadImagesSaga(action) {
 	const { feedUrl } = action.payload;
-	console.log('feed: ', feedUrl)
-	yield put({ type: galleryActions.loadImages });
+
+	yield put({ type: galleryActions.setBusy });
 
 	const response = yield call(getImages, feedUrl);
 	if (response.ok) {
@@ -21,6 +21,6 @@ export function* loadImagesSaga(action) {
 	}
 }
 
-export default function* watchGallery() {
+export default function* watchGallerySaga() {
 	yield takeEvery(galleryActions.loadImages, loadImagesSaga);
 }

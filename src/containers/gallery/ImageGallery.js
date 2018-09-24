@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { isEmpty } from 'lodash';
 
-export default class ImageGallery extends Component {
+import { loadImages, setBusy } from '../../reducer/gallery';
+
+class ImageGallery extends Component {
 
 	componentDidMount() {
-		this.props.loadImages(this.props.feed);
+		this.props.loadImages({
+			feedUrl: this.props.feed
+		});
 	}
 	
 	render() {
@@ -30,3 +35,15 @@ ImageGallery.propTypes = {
 	sorting: PropTypes.bool,
 	autoRotateTime: PropTypes.number
 }
+
+const mapStateToProps = state => ({
+	isBusy: state.gallery.isBusy,
+	images: state.gallery.images,
+});
+
+const mapDispatchToProps = {
+	loadImages,
+	setBusy
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ImageGallery);

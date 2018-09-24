@@ -9,6 +9,7 @@ import store, { history, persistor } from './store';
 
 class App extends Component {
   render() {
+
     return (
       <div className="App">
         <Provider store={store}>
