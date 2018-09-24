@@ -204,15 +204,15 @@ class ImageGallery extends Component {
 				>
 					<DialogContent>
 						<DialogContentText>
-							{images[selectedImage] && images[selectedImage].title}
+							{showImages[selectedImage] && showImages[selectedImage].title}
 						</DialogContentText>
-						<img src={images[selectedImage] && images[selectedImage].url} alt={'img_'+selectedImage} />
+						<img src={showImages[selectedImage] && showImages[selectedImage].url} alt={'img_'+selectedImage} />
 					</DialogContent>
 					<DialogActions>						
 						{selectedImage > 0 && <Button onClick={this.selectNextPrevImage(-1)} color="primary">
 							Prev
 						</Button>}
-						{selectedImage < images.length && <Button onClick={this.selectNextPrevImage(1)} color="primary">
+						{selectedImage < showImages.length && <Button onClick={this.selectNextPrevImage(1)} color="primary">
 							Next
 						</Button>}
 						<Button onClick={this.toggleImageModal(false)} color="primary">
