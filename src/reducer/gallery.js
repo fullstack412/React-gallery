@@ -14,7 +14,9 @@ export const setImages = createAction(actions.setImages);
 
 const defaultState = {
 	images: [],
-	isBusy: true
+	isBusy: true,
+	imagesPerPage: 10,
+	autoRotateTime: 4
 };
 
 export default handleActions({
