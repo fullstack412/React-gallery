@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import ReactPaginate from 'react-paginate';
 import { isEmpty } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import { 
@@ -19,13 +20,40 @@ import {
 	Button,
 } from '@material-ui/core';
 
-import { loadImages, setBusy, selectImage, toggleImageModal } from '../../reducer/gallery';
+import { loadImages, setBusy, selectImage, toggleImageModal, switchPage } from '../../reducer/gallery';
 import PageWrapper from '../../components/PageWrapper';
 
 const styles = theme => ({
 	dialog: {
 		width: 700,
 		height: 650
+	},
+	pagination: {
+		userSelect: 'none',
+		alignItems: 'center',
+		marginTop: '2rem',
+		display: 'flex',
+		paddingLeft: 0,
+		listStyle: 'none',
+		borderRadius: '0.25rem',
+
+		'& > a': {
+			display: 'inline-block',
+			boxSizing: 'border-box',
+			background: 'white',
+			color: 'black',
+			textDecoration: 'none',
+			cursor: 'pointer',
+			padding: '0.75rem',
+			minWidth: '2.15rem',
+			textAlign: 'center',
+			borderRadius: 5,
+			margin: '0rem 0.2rem',
+
+			'&:focus': {
+				outline: 'none'
+			}
+		}
 	}
 });
 
@@ -67,9 +95,11 @@ class ImageGallery extends Component {
 		this.state = {
 			query: '',
 			sortby: 'title',
+			imagesPerPage: 10
 		};
 
 		this.updateResults = this.updateResults.bind(this);
+		this.handlePageChange = this.handlePageChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -80,7 +110,8 @@ class ImageGallery extends Component {
 		this.props.loadImages({
 			feedUrl: this.props.feed,
 			query: this.state.query,
-			sortby: this.state.sortby
+			sortby: this.state.sortby,
+			imagesPerPage: this.state.imagesPerPage,
 		});
 	}
 	
@@ -108,9 +139,14 @@ class ImageGallery extends Component {
 		}
 	}
 
-	render() {
-		const { isBusy, images, sorting, search, pagination, selectedImage, classes } = this.props;
+	handlePageChange(data) {
+		this.props.switchPage(data.selected)
+	}
 
+	render() {
+		const { isBusy, images, sorting, search, pagination, selectedImage, showImages, classes } = this.props;
+
+		console.log(showImages)
 		return (
 			<PageWrapper>
 				<Toolbar>
@@ -142,6 +178,18 @@ class ImageGallery extends Component {
 					}}
 				>
 					<PaperHeader>
+						{pagination && 
+							<ReactPaginate
+								containerClassName={classes.pagination}
+								pageCount={this.props.totalPages}
+								pageRangeDisplayed={1}
+								forcePage={this.props.pageNumber}
+								marginPagesDisplayed={1}
+								previousLabel={"< Previous"}
+								nextLabel={"Next >"}
+								onPageChange={this.handlePageChange}
+							/>
+						}
 					</PaperHeader>
 					{isBusy && <CircularProgress />}
 					{
@@ -151,7 +199,7 @@ class ImageGallery extends Component {
 							</Wrapper>
 					}
 					{
-						!isBusy && !isEmpty(images) && images.map((image, id) => 
+						!isBusy && !isEmpty(images) && showImages.map((image, id) => 
 							<Img key={id} src={image.url} alt={'img_'+id} onClick={this.openImage(id)}/>
 						)
 					}
@@ -162,9 +210,9 @@ class ImageGallery extends Component {
 				>
 					<DialogContent>
 						<DialogContentText>
-							{images[selectedImage].title}
+							{images[selectedImage] && images[selectedImage].title}
 						</DialogContentText>
-						<img src={images[selectedImage].url} alt={'img_'+selectedImage} />
+						<img src={images[selectedImage] && images[selectedImage].url} alt={'img_'+selectedImage} />
 					</DialogContent>
 					<DialogActions>						
 						{selectedImage > 0 && <Button onClick={this.selectNextPrevImage(-1)} color="primary">
@@ -195,8 +243,11 @@ ImageGallery.propTypes = {
 const mapStateToProps = state => ({
 	isBusy: state.gallery.isBusy,
 	images: state.gallery.images,
+	showImages: state.gallery.showImages,
 	selectedImage: state.gallery.selectedImage,
 	bShowImageModal: state.gallery.bShowImageModal,
+	totalPages: state.gallery.totalPages,
+	pageNumber: state.gallery.pageNumber,
 });
 
 const mapDispatchToProps = {
@@ -204,6 +255,7 @@ const mapDispatchToProps = {
 	setBusy,
 	selectImage,
 	toggleImageModal,
+	switchPage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ImageGallery));
