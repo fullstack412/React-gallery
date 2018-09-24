@@ -6,6 +6,7 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 
 import MyGallery from './containers/gallery';
 import store, { history, persistor } from './store';
+import './App.css';
 
 class App extends Component {
   render() {

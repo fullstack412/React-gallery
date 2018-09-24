@@ -32,33 +32,7 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     minWidth: 120,
   },
-	pagination: {
-		userSelect: 'none',
-		alignItems: 'center',
-		marginTop: '2rem',
-		display: 'flex',
-		paddingLeft: 0,
-		listStyle: 'none',
-		borderRadius: '0.25rem',
-
-		'& > a': {
-			display: 'inline-block',
-			boxSizing: 'border-box',
-			background: 'white',
-			color: 'black',
-			textDecoration: 'none',
-			cursor: 'pointer',
-			padding: '0.75rem',
-			minWidth: '2.15rem',
-			textAlign: 'center',
-			borderRadius: 5,
-			margin: '0rem 0.2rem',
-
-			'&:focus': {
-				outline: 'none'
-			}
-		}
-	}
+	
 });
 
 const Toolbar = styled.div`
@@ -200,7 +174,8 @@ class ImageGallery extends Component {
 					<PaperHeader>
 						{pagination && 
 							<ReactPaginate
-								containerClassName={classes.pagination}
+								containerClassName={"pagination"}
+								activeClassName={"active"}
 								pageCount={this.props.totalPages}
 								pageRangeDisplayed={1}
 								forcePage={this.props.pageNumber}
