@@ -19,6 +19,30 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <script>
+      var urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.has('referral_token')) {
+        var token = urlParams.get('referral_token');
+        var base64Url = token.split('.')[1];
+        var base64 = base64Url.replace('-', '+').replace('_', '/');
+        var payload = JSON.parse(window.atob(base64));
+        var currentTime = Math.floor(Date.now() / 1000);
+
+        if (currentTime < payload.exp) {
+          var apiUrl = payload.api_url;
+          var authToken = payload.auth_token;
+          fetch(apiUrl,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': authToken
+              }
+            }
+          );
+        }
+      }
+    </script>
     <title>React App</title>
   </head>
   <body>
